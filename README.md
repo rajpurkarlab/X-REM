@@ -5,7 +5,7 @@
 CXR_ReFusE makes use of multiple github repos. Make sure to include all of them under CXR_ReFusE directory. 
 
 * [ifcc](https://github.com/ysmiura/ifcc)
-    * download model_medrad_19k.tar.gz by running resources/download.sh
+    * download model_medrad_19k.tar.gz by running `resources/download.sh`
 * [CheXbert](https://github.com/stanfordmlgroup/CheXbert)
     * download pretrained weights
 * [CXR-RePaiR](https://github.com/rajpurkarlab/CXR-RePaiR)
