@@ -21,7 +21,9 @@ Download the [zipfile](https://drive.google.com/file/d/1VW8q0b4Jh6Pj3crpFHTRC3mT
 ## Data-preprocessing
 Here we use CXR-RePaiR's data preprocessing steps.
 Refer to "Data Preprocessing" in cxr-repair for more detail. 
-We obtain `data/cxr.h5`, `data/mimic_train_impressions.csv`, `data/mimic_test_impressions.csv` from CXR-RePaiR
+We obtain `data/cxr.h5`, `data/mimic_train_impressions.csv`, `data/mimic_test_impressions.csv` from CXR-RePaiR.
+
+Afterwards, run `remove_prior_refs.py` to remove references to priors from the report data stored in `data/`.
 
 ## Training
 
