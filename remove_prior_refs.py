@@ -42,7 +42,8 @@ def update_json(pipe, path):
 def update_csv(pipe, path):
     df = pd.read_csv(path)
     for i in tqdm(range(len(df))):
-        df.loc[i, 'report'] = remove_priors(pipe, df.loc[i, 'report'])
+        if type(df.loc[i, 'report']) == str:
+            df.loc[i, 'report'] = remove_priors(pipe, df.loc[i, 'report'])
     df.to_csv(path, index=False)
 
 if __name__ == "__main__":
