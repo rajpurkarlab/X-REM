@@ -1,7 +1,5 @@
 import json
-import csv
-from tempfile import NamedTemporaryFile
-import shutil
+import pandas as pd
 import argparse
 from tqdm import tqdm
 from transformers import pipeline, AutoTokenizer, AutoModelForTokenClassification
@@ -42,17 +40,10 @@ def update_json(pipe, path):
     f.close()
 
 def update_csv(pipe, path):
-    tempfile = NamedTemporaryFile(mode='w', delete=True)
-    fields = ['Unnamed: 0', 'dicom_id', 'study_id', 'subject_id', 'report']
-
-    with open(path, 'r') as csvfile, tempfile:
-        reader = csv.DictReader(csvfile, fieldnames=fields)
-        writer = csv.DictWriter(tempfile, fieldnames=fields)
-        for row in reader:
-            row = {'Unnamed: 0': row['Unnamed: 0'], 'dicom_id': row['dicom_id'], 'study_id': row['study_id'], 'subject_id': row['subject_id'], 'report': remove_priors(pipe, row['report'])}
-            writer.writerow(row)
-    
-    shutil.move(tempfile.name, path)
+    df = pd.read_csv(path)
+    for i in tqdm(range(len(df))):
+        df.loc[i, 'report'] = remove_priors(pipe, df.loc[i, 'report'])
+    df.to_csv(path, index=False)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Remove prior references from report impressions')
@@ -64,8 +55,12 @@ if __name__ == "__main__":
     train_json = args.dir + "mimic_train.json"
     train_csv = args.dir + "mimic_train_impressions.csv"
     test_csv = args.dir + "mimic_test_impressions.csv"
-
+    
+    print("Updating JSON")
     update_json(pipe, train_json)
     
-    for csv_path in [train_csv, test_csv]:
-        update_csv(pipe, csv_path)
+    print("Updating test CSV")
+    update_csv(pipe, test_csv)
+
+    print("Updating train CSV") 
+    update_csv(pipe, train_csv)
