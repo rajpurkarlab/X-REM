@@ -15,7 +15,7 @@ CXR_ReFusE makes use of multiple github repos. Make sure to include all of them 
 
 As we made multiple edits to the ALBEF directory, please refer to the ALBEF directory uploaded here instead of cloning a new one. 
 
-Download the [zipfile](https://drive.google.com/file/d/1VW8q0b4Jh6Pj3crpFHTRC3mTCRUjI2zi/view?usp=sharing) containing our dataset and place them in the appropriate folders. 
+Download the `data` folder [here](https://drive.google.com/file/d/1Pepjgl96_m3HfMUPpDoVeu32US4MXs6T/view?usp=sharing) and place it in the `CXR_ReFusE` directory.
 
 
 ## Data-preprocessing
