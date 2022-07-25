@@ -15,13 +15,25 @@ CXR_ReFusE makes use of multiple github repos. Make sure to include all of them 
 
 As we made multiple edits to the ALBEF directory, please refer to the ALBEF directory uploaded here instead of cloning a new one. 
 
-Download the `data` folder [here](https://drive.google.com/file/d/1Pepjgl96_m3HfMUPpDoVeu32US4MXs6T/view?usp=sharing) and place it in the `CXR_ReFusE` directory.
-
 
 ## Data-preprocessing
 Here we use CXR-RePaiR's data preprocessing steps.
 Refer to "Data Preprocessing" in cxr-repair for more detail. 
 We obtain `data/cxr.h5`, `data/mimic_train_impressions.csv`, `data/mimic_test_impressions.csv` from CXR-RePaiR, then run `remove_prior_refs.py` to remove references to priors from the report data stored in `data/`.
+
+To skip these steps and instead obtain the following data, perform one of the following:
+
+Download the `data` folder [here](https://drive.google.com/file/d/1Pepjgl96_m3HfMUPpDoVeu32US4MXs6T/view?usp=sharing) and place it in the `CXR_ReFusE` directory.
+
+--OR--
+
+Run the following:
+```
+pip install gdown
+gdown 1Pepjgl96_m3HfMUPpDoVeu32US4MXs6T
+unzip data.zip
+rm data.zip
+```
 
 ## Training
 
