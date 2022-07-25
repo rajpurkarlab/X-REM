@@ -13,7 +13,7 @@ CXR_ReFusE makes use of multiple github repos. Make sure to include all of them 
 * [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric)
    * Merge `CXR-Report-Metric_CXR_ReFusE_code` with the original directory
 
-As we made multiple edits to the ALBEF directory, please refer to the ALBEF directory uploaded here instead of cloning a new one. 
+As we made multiple edits to the ALBEF directory, please refer to the ALBEF directory uploaded here instead of cloning a new one. Make sure to download [`ALBEF_4M.pth`](https://storage.googleapis.com/sfr-pcl-data-research/ALBEF/ALBEF_4M.pth).
 
 
 ## Data-preprocessing
