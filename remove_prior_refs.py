@@ -4,12 +4,8 @@ import argparse
 from tqdm import tqdm
 from transformers import pipeline, AutoTokenizer, AutoModelForTokenClassification
 
-modelname = "rajpurkarlab/biobert-finetuned-prior-rmv"
-tokenizer = AutoTokenizer.from_pretrained(modelname)
-model = AutoModelForTokenClassification.from_pretrained(modelname)
-
 def get_pipe():
-    model_name = "rajpurkarlab/biobert-finetuned-prior-rmv"
+    model_name = "rajpurkarlab/gilbert"
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForTokenClassification.from_pretrained(model_name)
     pipe = pipeline(task="token-classification", model=model.to("cpu"), tokenizer=tokenizer, aggregation_strategy="simple")
