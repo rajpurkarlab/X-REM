@@ -127,10 +127,12 @@ Linked here are the ALBEF model checkpoints [with](https://www.dropbox.com/s/b4t
 
 To run inference, perform the following commands:
 
-```bash
-cd ifcc
+<!-- cd ifcc
 conda env create -f environment.yml -n m2trans
-cd ..
+conda activate m2trans
+cd .. -->
+
+```bash
 sh inference.sh
 ```
 
@@ -147,6 +149,8 @@ For evaluating the generated reports, we make use of CXR-Report-Metric:
 
 ```bash
 cd CXR-Report-Metric
+conda create -n "myenv" python=3.7.0 ipython
+conda activate myenv
 pip install -r requirements.txt
 ```
 
@@ -154,10 +158,9 @@ Next, download the RadGraph model checkpoint from PhysioNet [here](https://physi
 
 ### Evaluation
 
-1. Use `prepare_df.py` to select the inferences for the corresponding 2,192 samples from our generation. 
+1. Use `prepare_df.py` to select the inferences for the corresponding 2,192 samples from our generation. (If using the visual entailment model, make sure to run `python prepare_df.py --use_ve=True`).
 
 2. In `config.py`, set `GT_REPORTS` to `../data/cxr2_generated_appa.csv` and `PREDICTED_REPORTS` to `pred.csv`. Set `OUT_FILE` to the desired path for the output metric scores. Set `CHEXBERT_PATH` to the path to the downloaded checkpoint (`CheXbert/models/chexbert.pth`).
-
 
 3. Use `test_metric.py` to generate the scores. 
 
