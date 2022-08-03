@@ -112,7 +112,7 @@ def main(args, config):
 
     #### Dataset #### 
     print("Creating dataset")
-    datasets = create_dataset('ve', config, max_words = 30) 
+    datasets = create_dataset('ve', config) 
     
     if args.distributed:
         num_tasks = utils.get_world_size()
