@@ -48,10 +48,10 @@ Finally use `compute_avg_score.py` to find the average scores.
 Here we introduce several additional experiments we conducted with CXR_ReFusE approach. 
 
 ### VE vs No VE
-We observe that appending the visual entailment step at the end significantly boosts the model performance. To disable the visual entailment step, comment out the second call to the retrieval module in `CXR_ReFusE_pipeline.py`, adjust the topk value for the first module to 2, and set the delimiter value to `' '`. 
+We observe that appending the visual entailment step at the end significantly boosts the model performance. To disable the visual entailment step, comment out the `ve_module` in `CXR_ReFusE_pipeline.py`, adjust the `topk` value for `cosine_sim_module` to 2, and set the delimiter value to `' '`. 
 
 ### Report filtering vs no report filtering
-We also observe that appending the filtering step improves the model performance. To skip the redundancy filtering, comment out `m2trans_nli_filter.py` in `inference.sh` and adjust the topk value for the VE output to 2. 
+We also observe that appending the filtering step improves the model performance. To skip the redundancy filtering, comment out `m2trans_nli_filter.py` in `inference.sh` and adjust the `topk value` for the `ve_module` in `CXR_ReFusE_pipeline.py` to 2. 
 
 ### Bertscore vs NLI score for measuing 
 One potential limitation of using nli filter is the fact that it is not symmetric. If the candidate report captures a broader context than our current concatenation of reports, the nli filter will return "neutral" despite the overlapping content. To address this issue, we tried using Bertscore as a measure of sentence similarity and used maximum f1 threshold of 0.5 to filter out redundant reports. To replicate this experiment, replace `m2trans_nli_filter.py` with `bertscore_nli_filter.py` in `inference.sh`
