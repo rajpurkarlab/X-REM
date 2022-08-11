@@ -21,6 +21,20 @@ Download our [pretrained checkpoints](https://drive.google.com/file/d/11UorBbh5c
 
 Download the train/test reports and images from [MIMIC-CXR](https://physionet.org/content/mimic-cxr/2.0.0/). You may have to request for an approval to access the files.
 
+## Environment
+
+To create a conda environment for CXR_ReFusE, run
+
+```
+conda env create -f environment.yml -n cxr_refuse_env
+```
+
+To activate the environment, run 
+
+```
+conda activate cxr_refuse_env
+```
+
 ## Preprocessing
 Refer to the data preprocessing step in [CXR-RePaiR](https://github.com/rajpurkarlab/CXR-RePaiR) to acquire `mimic_train_impressions.csv`, `mimic_test_impressions.csv`, and `cxr.h5`.  Then, run 
 
