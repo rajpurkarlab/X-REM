@@ -23,20 +23,22 @@ Download the train/test reports and images from [MIMIC-CXR](https://physionet.or
 
 ## Environment
 
-To create a conda environment for CXR_ReFusE, run
+Create a conda environment for CXR_ReFusE
 
 ```
 conda env create -f environment.yml -n cxr_refuse_env
 ```
 
-To activate the environment, run 
+Activate the environment
 
 ```
 conda activate cxr_refuse_env
 ```
 
 ## Preprocessing
-Refer to the data preprocessing step in [CXR-RePaiR](https://github.com/rajpurkarlab/CXR-RePaiR) to acquire `mimic_train_impressions.csv`, `mimic_test_impressions.csv`, and `cxr.h5`.  Then, run 
+Refer to the data preprocessing step in [CXR-RePaiR](https://github.com/rajpurkarlab/CXR-RePaiR) to acquire `mimic_train_impressions.csv`, `mimic_test_impressions.csv`, and `cxr.h5`.  
+
+Preprocess data to be used for pre-training ALBEF
 
 ```
 preprocess_mimic.py --data_dir <path to MIMIC>  --impressions_train_path <path to mimic_train_impressions.csv> --impressions_test_path <path to mimic_test_impressions.csv> --out_dir <path to store the processed data>
@@ -44,17 +46,17 @@ preprocess_mimic.py --data_dir <path to MIMIC>  --impressions_train_path <path t
 
 ## Training
 
-To pretrain the ALBEF model, run 
+Pretrain ALBEF
 ```
 cd ALBEF 
 sh pretrain_script.sh
 ```
 
-To generate the train file for finetuning ALBEF on visual entailment task, run 
+Generate the train file for finetuning ALBEF on visual entailment task 
 ```
 python generate_ve_train.py
 ```
-To finetune the ALBEF model on visual entailment task, run 
+Finetune the ALBEF model on visual entailment task 
 ```
 cd ALBEF 
 sh ve_script.sh
@@ -62,7 +64,6 @@ sh ve_script.sh
 
 ## Inference
 
-To generate reports, run 
 ```
 sh inference.sh
 ```
@@ -72,7 +73,6 @@ sh inference.sh
     
 ## Evaluation
 
-To evaluate the generated reports, run
 
 ```
 cd CXR-Report-Metric
@@ -85,17 +85,17 @@ Refer to [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric) 
 
 ## Supplementary Experiments
 
-To generate reports without using the visual entailment scores, run 
+Generate reports without using the visual entailment scores 
 ```
 sh inference_no_ve.sh
 ```
 
-To generate reports without the nli filter, run 
+Generate reports without the nli filter
 ```
 sh inference_no_nli.sh
 ```
 
-To replace the nli filter with bertscore as the metric for measuring redundancy, run 
+Replace the nli filter with bertscore as the metric for measuring redundancy
 ```
 sh inference_bertscore.sh
 ```
