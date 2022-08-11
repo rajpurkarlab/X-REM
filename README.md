@@ -1,8 +1,8 @@
 # CXR_ReFusE
 
-## Setup
+## Preparation
 
-CXR_ReFusE makes use of multiple github repos. Make sure to include all of them under CXR_ReFusE directory. 
+CXR_ReFusE makes use of multiple github repos. Make sure to include all of them under `CXR_ReFusE` directory. 
 
 * [ifcc](https://github.com/ysmiura/ifcc)
     * download model_medrad_19k.tar.gz by running `resources/download.sh`
@@ -15,11 +15,11 @@ CXR_ReFusE makes use of multiple github repos. Make sure to include all of them 
 
 As we made multiple edits to the ALBEF directory, please refer to the ALBEF directory uploaded here instead of cloning a new one. 
 
-Download the [zipfile](https://drive.google.com/file/d/1VW8q0b4Jh6Pj3crpFHTRC3mTCRUjI2zi/view?usp=sharing) containing our dataset and place them in the appropriate folders. 
+Download our [pretrained checkpoints](https://drive.google.com/file/d/11UorBbh5cOcDfIzy_lCgMdn0zThvpDbp/view?usp=sharing) here!
 
 ## Data
 
-Download the train/test reports and images from [MIMIC-CXR](https://physionet.org/content/mimic-cxr/2.0.0/) after receiving an approval.  
+Download the train/test reports and images from [MIMIC-CXR](https://physionet.org/content/mimic-cxr/2.0.0/). You may have to request for an approval to access the files.
 
 ## Preprocessing
 Refer to the data preprocessing step in [CXR-RePaiR](https://github.com/rajpurkarlab/CXR-RePaiR) to acquire `mimic_train_impressions.csv`, `mimic_test_impressions.csv`, and `cxr.h5`.  Then, run 
