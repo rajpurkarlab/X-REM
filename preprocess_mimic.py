@@ -79,8 +79,3 @@ if __name__ == '__main__':
     parser.add_argument('--out_dir', help='directory to store the outputs')
     args = parser.parse_args()
     main(args)
-
-# data_dir = '/n/data1/hms/dbmi/rajpurkar/lab/datasets/cxr/MIMIC-CXR'
-# impressions_train_path = '/home/kt220/cxr-rep/mimic_data/mimic_train_impressions.csv'
-# impressions_test_path = '/home/kt220/cxr-rep/mimic_data/mimic_test_impressions.csv'
-# out_dir = '/n/data1/hms/dbmi/rajpurkar/lab/home/kt220/preprocess_albef_02m_20d_10h/'
