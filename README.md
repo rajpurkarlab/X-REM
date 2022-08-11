@@ -17,11 +17,15 @@ As we made multiple edits to the ALBEF directory, please refer to the ALBEF dire
 
 Download the [zipfile](https://drive.google.com/file/d/1VW8q0b4Jh6Pj3crpFHTRC3mTCRUjI2zi/view?usp=sharing) containing our dataset and place them in the appropriate folders. 
 
+## Data
 
-## Data-preprocessing
-Here we use CXR-RePaiR's data preprocessing steps.
-Refer to "Data Preprocessing" in cxr-repair for more detail. 
-We obtain `data/cxr.h5`, `data/mimic_train_impressions.csv`, `data/mimic_test_impressions.csv` from CXR-RePaiR
+
+## Preprocessing
+First refer to the data preprocessing step in [CXR-RePaiR](https://github.com/rajpurkarlab/CXR-RePaiR) to acquire `mimic_train_impressions.csv`, `mimic_test_impressions.csv`, and `cxr.h5`.  Then, run 
+
+```
+preprocess_mimic.py --data_dir <path to MIMIC>  --impressions_train_path <path to mimic_train_impressions.csv> --impressions_test_path <path to mimic_test_impressions.csv> --out_dir <path to store the processed data>
+```
 
 ## Training
 
