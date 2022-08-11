@@ -6,12 +6,12 @@ module load cuda/11.2
 
 cd ALBEF
 
-python3 CXR_ReFusE_pipeline.py 
+python3 CXR_ReFusE_pipeline.py --save_path before_nli.csv
 
 cd ../ifcc
 
 conda activate m2trans
 
-python3 m2trans_nli_filter.py 
+python3 m2trans_nli_filter.py --input_path before_nli.csv --save_path after_nli.csv
 
-conda deactivate m2trans
+conda deactivate
