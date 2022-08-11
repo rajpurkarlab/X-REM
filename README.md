@@ -53,7 +53,7 @@ sh inference.sh
     
 ## Evaluation
 
-For evaluating the generated reports, we use [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric)
+To evaluate the generated reports, run
 
 ```
 cd CXR-Report-Metric
@@ -62,6 +62,7 @@ python prepare_df.py --fpath <input path> --opath <output path>
 python test_metric.py
 python3 compute_avg_score.py --fpath <input path>
 ```
+Refer to [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric) for a detailed explanation on the metric 
 
 ## Supplementary Experiments
 
