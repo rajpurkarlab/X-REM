@@ -2,16 +2,16 @@
 
 ## Preparation
 
-CXR_ReFusE makes use of multiple github repos. Make sure to include all of them under `CXR_ReFusE` directory. 
+Make sure to download the github repositories below: 
 
 * [ifcc](https://github.com/ysmiura/ifcc)
     * download model_medrad_19k.tar.gz by running `resources/download.sh`
-    * Merge `ifcc_CXR_ReFusE_code` with the original directory
+    * Merge `ifcc_CXR_ReFusE_code` with `ifcc`
 * [CheXbert](https://github.com/stanfordmlgroup/CheXbert)
     * download the [pretrained weights](https://stanfordmedicine.box.com/s/c3stck6w6dol3h36grdc97xoydzxd7w9) 
 * [CXR-RePaiR](https://github.com/rajpurkarlab/CXR-RePaiR)
 * [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric)
-   * Merge `CXR-Report-Metric_CXR_ReFusE_code` with the original directory
+   * Merge `CXR-Report-Metric_CXR_ReFusE_code` with `CXR-Report-Metric`
 
 As we made multiple edits to the ALBEF directory, please refer to the ALBEF directory uploaded here instead of cloning a new one. 
 
