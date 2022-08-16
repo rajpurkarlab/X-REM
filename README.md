@@ -19,7 +19,7 @@ Download our [pretrained checkpoints](https://drive.google.com/file/d/11UorBbh5c
 
 ## Data
 
-Download the train/test reports and images from [MIMIC-CXR](https://physionet.org/content/mimic-cxr/2.0.0/). You may have to request for an approval to access the files.
+Download the train/test reports and images from [MIMIC-CXR](https://physionet.org/content/mimic-cxr/2.0.0/). You may have to request for an approval to access the files. We also provide the ids used in our study in `mimic_pretrain_study_id.csv`, `mimic_pretrain_study_id.csv`, and `mimic_challenge_dicom_id.csv`. 
 
 ## Environment
 
