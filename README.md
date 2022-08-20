@@ -87,15 +87,20 @@ Refer to [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric) 
 
 Generate reports without using the visual entailment scores 
 ```
-sh inference_no_ve.sh
+cd ALBEF
+python3 CXR_ReFusE_pipeline.py --albef_retrieval_delimiter ' ' --save_path no_ve.csv --albef_retrieval_top_k 2 --albef_ve_top_k 0
 ```
 
 Generate reports without the nli filter
 ```
-sh inference_no_nli.sh
+cd ALBEF
+python3 CXR_ReFusE_pipeline.py --albef_ve_delimiter ' ' --save_path no_nli.csv --albef_ve_top_k 1
 ```
 
 Replace the nli filter with bertscore as the metric for measuring redundancy
 ```
-sh inference_bertscore.sh
+cd ALBEF
+python3 CXR_ReFusE_pipeline.py --save_path before_bertscore.csv
+python3 bertscore_filter.py --input_path before_bertscore.csv --save_path after_bertscore.csv
+
 ```
