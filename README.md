@@ -49,7 +49,7 @@ preprocess_mimic.py --data_dir <path to MIMIC>  --impressions_train_path <path t
 Pretrain ALBEF
 ```
 cd ALBEF 
-sh pretrain_script.sh
+python3 -m torch.distributed.launch --nproc_per_node=4 --use_env Pretrain.py --config configs/Pretrain.yaml --output_dir <output path>  --checkpoint <path to pretrained ALBEF checkpoint>  --resume true
 ```
 
 Generate the train file for finetuning ALBEF on visual entailment task 
