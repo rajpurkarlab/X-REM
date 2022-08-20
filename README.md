@@ -59,16 +59,21 @@ python generate_ve_train.py
 Finetune the ALBEF model on visual entailment task 
 ```
 cd ALBEF 
-sh ve_script.sh
+python3 -m torch.distributed.launch --nproc_per_node=4 --use_env VE.py --config ./configs/VE.yaml --output_dir <output path> --checkpoint <path to checkpoint>
 ```
 
 ## Inference
 
 ```
-sh inference.sh
+cd ALBEF
+python3 CXR_ReFusE_pipeline.py --save_path before_nli.csv
+cd ../ifcc
+conda activate m2trans
+python3 m2trans_nli_filter.py --input_path before_nli.csv --save_path after_nli.csv
+conda deactivate
 ```
 
-`inference.sh` generates a dataframe containing two columns: "Report Impression" column holding reports before applying the nli filter, and 
+This generates a dataframe containing two columns: "Report Impression" column holding reports before applying the nli filter, and 
 "filtered" column containing the filtered reports. 
     
 ## Evaluation
@@ -102,5 +107,4 @@ Replace the nli filter with bertscore as the metric for measuring redundancy
 cd ALBEF
 python3 CXR_ReFusE_pipeline.py --save_path before_bertscore.csv
 python3 bertscore_filter.py --input_path before_bertscore.csv --save_path after_bertscore.csv
-
 ```
