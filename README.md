@@ -11,7 +11,7 @@ Make sure to download the github repositories below:
 * [CXR-RePaiR](https://github.com/rajpurkarlab/CXR-RePaiR)
 * [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric)
 
-Once you clone the repositories, add the following files to the respective folders.
+Once you clone the repositories, add the following files to the respective folders:
 
 ```
 mv M2TransNLI.py example_m2trans_nli.csv m2trans_nli_filter.py <path to ifcc folder>
@@ -29,13 +29,13 @@ Download the train/test reports and images from [MIMIC-CXR](https://physionet.or
 
 ## Environment
 
-Create a conda environment for CXR-ReFusE
+Create a conda environment for CXR-ReFusE:
 
 ```
 conda env create -f environment.yml -n cxr-refuse-env
 ```
 
-Activate the environment
+Activate the environment:
 
 ```
 conda activate cxr-refuse-env
@@ -44,7 +44,7 @@ conda activate cxr-refuse-env
 ## Preprocessing
 Refer to the data preprocessing step in [CXR-RePaiR](https://github.com/rajpurkarlab/CXR-RePaiR) to acquire `mimic_train_impressions.csv`, `mimic_test_impressions.csv`, and `cxr.h5`.  
 
-Preprocess data to be used for pre-training ALBEF
+Preprocess data to be used for pre-training ALBEF:
 
 ```
 preprocess_mimic.py --data_dir <path to MIMIC>  --impressions_train_path <path to mimic_train_impressions.csv> --impressions_test_path <path to mimic_test_impressions.csv> --out_dir <path to store the processed data>
@@ -52,17 +52,17 @@ preprocess_mimic.py --data_dir <path to MIMIC>  --impressions_train_path <path t
 
 ## Training
 
-Pretrain ALBEF
+Pretrain ALBEF:
 ```
 cd ALBEF 
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env Pretrain.py --config configs/Pretrain.yaml --output_dir <output path>  --checkpoint <path to pretrained ALBEF checkpoint>  --resume true
 ```
 
-Generate the train file for finetuning ALBEF on visual entailment task 
+Generate the train file for finetuning ALBEF on visual entailment task:
 ```
 python generate_ve_train.py
 ```
-Finetune the ALBEF model on visual entailment task 
+Finetune the ALBEF model on visual entailment task:
 ```
 cd ALBEF 
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env VE.py --config ./configs/VE.yaml --output_dir <output path> --checkpoint <path to checkpoint>
@@ -96,19 +96,19 @@ Refer to [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric) 
 
 ## Supplementary Experiments
 
-Generate reports without using the visual entailment scores 
+Generate reports without using the visual entailment scores: 
 ```
 cd ALBEF
 python3 CXR-ReFusE-pipeline.py --albef_retrieval_delimiter ' ' --save_path no_ve.csv --albef_retrieval_top_k 2 --albef_ve_top_k 0
 ```
 
-Generate reports without the nli filter
+Generate reports without the nli filter:
 ```
 cd ALBEF
 python3 CXR-ReFusE-pipeline.py --albef_ve_delimiter ' ' --save_path no_nli.csv --albef_ve_top_k 1
 ```
 
-Replace the nli filter with bertscore as the metric for measuring redundancy
+Replace the nli filter with bertscore as the metric for measuring redundancy:
 ```
 cd ALBEF
 python3 CXR-ReFusE-pipeline.py --save_path before_bertscore.csv
