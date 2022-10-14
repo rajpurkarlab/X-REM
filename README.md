@@ -47,7 +47,7 @@ Refer to the data preprocessing step in [CXR-RePaiR](https://github.com/rajpurka
 Preprocess data to be used for pre-training ALBEF:
 
 ```
-preprocess_mimic.py --data_dir <path to MIMIC>  --impressions_train_path <path to mimic_train_impressions.csv> --impressions_test_path <path to mimic_test_impressions.csv> --out_dir <path to store the processed data>
+python3 -m preprocess_mimic.py --data_dir <path to MIMIC>  --impressions_train_path <path to mimic_train_impressions.csv> --impressions_test_path <path to mimic_test_impressions.csv> --out_dir <path to store the processed data>
 ```
 
 ## Training
