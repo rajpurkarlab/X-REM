@@ -97,7 +97,7 @@ Refer to [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric) 
 
 ## Supplementary Experiments
 
-1. Generate reports with varying top-k value for retrieval: 
+* Generate reports with varying top-k value for retrieval: 
 ```
 cd ALBEF
 python3 XREM_pipeline.py --save_path <preliminary save path> --albef_retrieval_top_k <num reports retrieved with cosine sim> --albef_itm_top_k <num reports retrieved with image-text matching>
