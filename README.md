@@ -59,7 +59,7 @@ python3 -m torch.distributed.launch --nproc_per_node=4 --use_env Pretrain.py --c
 ```
 Generating train files for image-text matching task:
 
-(Note that we approached image-text matching as a visual entailment task with a binary classification (entailment/non-entailment) )
+(Note that we approached image-text matching as a visual entailment task with a binary classification of entailment/non-entailment)
 ```
 python generate_ve_train.py
 ```
@@ -113,5 +113,12 @@ Replace the nli filter with bertscore as the metric for measuring redundancy:
 ```
 cd ALBEF
 python3 XREM_pipeline.py --save_path before_bertscore.csv
+python3 bertscore_filter.py --input_path before_bertscore.csv --save_path after_bertscore.csv
+```
+Skip the pre-training step and directly fine-tune off-the-shelf ALBEF checkpoint on image-text matching:
+```
+cd ALBEF
+python3 -m torch.distributed.launch --nproc_per_node=4 --use_env VE.py --config ./configs/VE.yaml --output_dir <output path> --checkpoint <path to ALBEF_4M.pth>
+python3 XREM_pipeline.py --albef_retrieval_ckpt <path to ALBEF_4M.pth> --albef_itm_ckpt <path to the fine-tuned checkpoint> --save_path before_bertscore.csv
 python3 bertscore_filter.py --input_path before_bertscore.csv --save_path after_bertscore.csv
 ```
