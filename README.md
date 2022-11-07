@@ -79,12 +79,10 @@ conda activate m2trans
 python3 m2trans_nli_filter.py --input_path <preliminary save path> --save_path <final save path>
 conda deactivate
 ```
-
 This generates a dataframe containing two columns: "Report Impression" column holding reports before applying the nli filter, and 
 "filtered" column containing the filtered reports. 
     
 ## Evaluation
-
 
 ```
 cd CXR-Report-Metric
@@ -125,7 +123,7 @@ cd ALBEF
 python3 XREM_pipeline.py --save_path <preliminary save path>
 python3 bertscore_filter.py --input_path <preliminary save path> --save_path <final save path>
 ```
-* Skip the pre-training step and directly fine-tune off-the-shelf ALBEF checkpoint on image-text matching:
+* Skip the pre-training step and directly fine-tune the off-the-shelf ALBEF checkpoint on image-text matching:
 ```
 cd ALBEF
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env VE.py --config ./configs/VE.yaml --output_dir <output path> --checkpoint <path to ALBEF_4M.pth>
