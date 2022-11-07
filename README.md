@@ -1,5 +1,7 @@
 # X-REM  (Contrastive X-Ray REport Match)
 
+This is the offical repository for X-REM. We provide the implementation of X-REM as well as the source code for both training and generating inference. 
+
 <img src="image.png" width="600">
 
 ## Preparation
