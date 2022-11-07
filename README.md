@@ -1,5 +1,7 @@
 # X-REM  (Contrastive X-Ray REport Match)
 
+<img src="image.png" width="600">
+
 ## Preparation
 
 Make sure to download the github repositories below: 
