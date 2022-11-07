@@ -96,16 +96,16 @@ Refer to [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric) 
 
 ## Supplementary Experiments
 
-Generate reports without using the visual entailment scores: 
+Generate reports without using the image-text matching scores: 
 ```
 cd ALBEF
-python3 XREM-pipeline.py --albef_retrieval_delimiter ' ' --save_path no_ve.csv --albef_retrieval_top_k 2 --albef_ve_top_k 0
+python3 XREM-pipeline.py --albef_retrieval_delimiter ' ' --save_path no_itm.csv --albef_retrieval_top_k 2 --albef_itm_top_k 0
 ```
 
 Generate reports without the nli filter:
 ```
 cd ALBEF
-python3 XREM-pipeline.py --albef_ve_delimiter ' ' --save_path no_nli.csv --albef_ve_top_k 1
+python3 XREM-pipeline.py --albef_ve_delimiter ' ' --save_path no_nli.csv --albef_itm_top_k 1
 ```
 
 Replace the nli filter with bertscore as the metric for measuring redundancy:
