@@ -92,7 +92,7 @@ python prepare_df.py --fpath <input path> --opath <output path>
 python test_metric.py
 python3 compute_avg_score.py --fpath <input path>
 ```
-Refer to [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric) for a detailed explanation on the metric 
+Refer to [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric) for a detailed explanation on the metric.
 
 ## Supplementary Experiments
 
