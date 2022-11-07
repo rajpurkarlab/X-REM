@@ -57,8 +57,8 @@ Pretrain ALBEF:
 cd ALBEF 
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env Pretrain.py --config configs/Pretrain.yaml --output_dir <output path>  --checkpoint <path to pretrained ALBEF checkpoint>  --resume true
 ```
-
-Generate the train file for finetuning ALBEF on image-text matching task (visual entailment task with a binary (entailment/non-entailment) classification):
+Generating train files for image-text matching task:
+(Note that we approached image-text matching as a visual entailment task with a binary classification (entailment/non-entailment) )
 ```
 python generate_ve_train.py
 ```
