@@ -1,5 +1,5 @@
 import pandas as pd
-from CXR_ReFusE_module import RETRIEVAL_MODULE
+from XREM_module import RETRIEVAL_MODULE
 import os
 from tqdm import tqdm
 import argparse
@@ -19,7 +19,7 @@ def main(args):
     output = cosine_sim_module.predict()
     
     if args.albef_ve_top_k > 0:
-        new_impressions = [el.split(args.albef_retrieval_delimiter) for el in output['Report Impression']]
+        new_impressions = [report.split(args.albef_retrieval_delimiter) for report in output['Report Impression']]
         ve_module = RETRIEVAL_MODULE(impressions=new_impressions, 
                                                 mode='visual-entailment', 
                                                 config=args.albef_ve_config, 

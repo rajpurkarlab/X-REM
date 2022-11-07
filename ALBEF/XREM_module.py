@@ -19,7 +19,7 @@ from models.tokenization_bert import BertTokenizer
 from torchvision.transforms import Compose, Normalize, Resize, InterpolationMode
 import utils
 from PIL import Image
-from CXR_ReFusE_dataset import CXRTestDataset, CXRTestDataset_h5
+from XREM_dataset import CXRTestDataset, CXRTestDataset_h5
 
 
 
@@ -102,7 +102,7 @@ class RETRIEVAL_MODULE:
             return self.ve_predict() 
 
     #adapted cxr-repair codebase
-    def generate_embeddings(self):
+    def generate_embeddings(self, batch_size=2000):
         #adapted albef codebase
         def _embed_text(impression):
             with torch.no_grad():
@@ -118,12 +118,10 @@ class RETRIEVAL_MODULE:
                 text_embed = F.normalize(self.model.text_proj(text_feat[:,0,:]))
                 text_embed /= text_embed.norm(dim=-1, keepdim=True)
             return text_embed
-        bs = 2000
-        num_batches = self.impressions.shape[0] // bs
+        num_batches = self.impressions.shape[0] // batch_size
         tensors = []
         for i in tqdm(range(num_batches + 1)):
-            batch = self.impressions[bs*i:bs*i+bs]
-            batch = list(self.impressions[bs*i:min(bs*i+bs, len(self.impressions))])
+            batch = list(self.impressions[batch_size*i:min(batch_size*(i+1), len(self.impressions))])
             weights = _embed_text(batch)
             tensors.append(weights)
         self.embeddings = torch.cat(tensors)
@@ -176,26 +174,26 @@ class RETRIEVAL_MODULE:
             y_preds.append(idxes)
             
         reports_list = self.select_reports(y_preds)
-        _df = pd.DataFrame(reports_list)
-        _df.columns = [ "Report Impression"]
-        return _df
+        df = pd.DataFrame(reports_list)
+        df.columns = [ "Report Impression"]
+        return df
 
     #adapted cxr-repair codebase
     def cosine_sim_predict(self): 
-        def _softmax(x):
+        def softmax(x):
             return np.exp(x)/sum(np.exp(x))
-        def _embed_img(data):
+        def embed_img(data):
             images = data.to(self.device, dtype = torch.float)
             image_features = self.model.visual_encoder(images)        
             image_features = self.model.vision_proj(image_features[:,0,:])            
             image_features = F.normalize(image_features,dim=-1) 
             return image_features
-        def _compute_cosine_sim():
+        def compute_cosine_sim():
             y_pred = []
             loader = torch.utils.data.DataLoader(self.dset, shuffle=False)
             with torch.no_grad():
                 for  data in tqdm(loader):
-                    image_features = _embed_img(data)
+                    image_features = embed_img(data)
                     logits = image_features @ self.embeddings.T
                     logits = np.squeeze(logits.to('cpu').numpy(), axis=0).astype('float64')
                     norm_logits = (logits - logits.mean()) / (logits.std())
@@ -203,10 +201,10 @@ class RETRIEVAL_MODULE:
                     y_pred.append(probs)
             return np.array(y_pred)
 
-        y_pred = _compute_cosine_sim()
+        y_pred = compute_cosine_sim()
         reports_list = self.select_reports(y_pred)
-        _df = pd.DataFrame(reports_list)
-        _df.columns = [ "Report Impression"]
-        return _df
+        df = pd.DataFrame(reports_list)
+        df.columns = [ "Report Impression"]
+        return df
 
         
