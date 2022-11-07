@@ -18,32 +18,56 @@ def main(args):
                                          max_token_len = 25)
     output = cosine_sim_module.predict()
     
-    if args.albef_ve_top_k > 0:
+    if args.albef_itm_top_k > 0:
         new_impressions = [report.split(args.albef_retrieval_delimiter) for report in output['Report Impression']]
-        ve_module = RETRIEVAL_MODULE(impressions=new_impressions, 
-                                                mode='visual-entailment', 
-                                                config=args.albef_ve_config, 
-                                                checkpoint=args.albef_ve_ckpt,
-                                                topk=args.albef_ve_top_k,
+        itm_module = RETRIEVAL_MODULE(impressions=new_impressions, 
+                                                mode='image-text-matching', 
+                                                config=args.albef_itm_config, 
+                                                checkpoint=args.albef_itm_ckpt,
+                                                topk=args.albef_itm_top_k,
                                                 input_resolution=384, 
                                                 img_path=args.img_path, 
-                                                delimiter=args.albef_ve_delimiter, 
+                                                delimiter=args.albef_itm_delimiter, 
                                                 max_token_len=30)
-        output = ve_module.predict()
+        output = itm_module.predict()
     output.to_csv(args.save_path, index = False)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--impressions_path', default='../data/mimic_train_impressions.csv', help= 'path to the mimic train corpus')
-    parser.add_argument('--img_path', default='../data/cxr.h5', help = 'path to the test file') 
-    parser.add_argument('--save_path', default='example.csv')
-    parser.add_argument('--albef_retrieval_config', default='configs/Retrieval_flickr.yaml')
-    parser.add_argument('--albef_retrieval_ckpt', default='output/sample/pretrain/checkpoint_59.pth')
-    parser.add_argument('--albef_retrieval_top_k', type = int, default=50)
-    parser.add_argument('--albef_retrieval_delimiter', default='[SEP]')
-    parser.add_argument('--albef_ve_config', default='configs/VE.yaml')
-    parser.add_argument('--albef_ve_ckpt', default='output/sample/ve/checkpoint_7.pth')    
-    parser.add_argument('--albef_ve_top_k', default=10, type = int, help='url used to set up distributed training')
-    parser.add_argument('--albef_ve_delimiter', default='[SEP]')
+    parser.add_argument('--impressions_path', 
+                        default='../data/mimic_train_impressions.csv', 
+                        help='path to the mimic train corpus')
+    parser.add_argument('--img_path', 
+                        default='../data/cxr.h5', 
+                        help='path to the test file') 
+    parser.add_argument('--save_path', 
+                        default='example.csv', 
+                        help='path to store the output')
+    parser.add_argument('--albef_retrieval_config', 
+                        default='configs/Retrieval_flickr.yaml', 
+                        help='config file for the pre-trained albef model used for cosine similarity retrieval')
+    parser.add_argument('--albef_retrieval_ckpt', 
+                        default='output/sample/pretrain/checkpoint_59.pth', 
+                        help='weights for the pre-trained albef model')
+    parser.add_argument('--albef_retrieval_top_k', 
+                        type=int, 
+                        default=50, 
+                        help='number of reports to retrieve at the cosine similarity retrieval step')
+    parser.add_argument('--albef_retrieval_delimiter', 
+                        default='[SEP]', 
+                        help='delimiter used for the cosine similarity retrieval step')
+    parser.add_argument('--albef_itm_config', 
+                        default='configs/VE.yaml', 
+                        help='config file for the albef model fine-tuned on image-text matching (binary visual-entailment)')
+    parser.add_argument('--albef_itm_ckpt', 
+                        default='output/sample/ve/checkpoint_7.pth', 
+                        help='weights for the fine-tuned albef model')    
+    parser.add_argument('--albef_itm_top_k', 
+                        default=10, 
+                        type = int, 
+                        help='number of reports to retrieve at the image-text matching retrieval step')
+    parser.add_argument('--albef_itm_delimiter', 
+                        default='[SEP]',
+                        help='delimiter used for the image-text matching retrieval step')
     args = parser.parse_args()
     main(args)

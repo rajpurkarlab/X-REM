@@ -37,7 +37,7 @@ class RETRIEVAL_MODULE:
                 max_token_len):
                 
         self.mode = mode
-        assert mode == 'cosine-sim' or mode == 'visual-entailment', 'mode should be cosine-sim or visual-entailment'
+        assert mode == 'cosine-sim' or mode == 'image-text-matching', 'mode should be cosine-sim or visual-entailment'
         self.impressions = impressions
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased') 
@@ -60,6 +60,7 @@ class RETRIEVAL_MODULE:
 
 
     #adapted albef codebase
+    #For Image-Text Matching, we use ALBEF fine-tuned on visual entailmet to perform binary classification (entail/nonentail) 
     def load_albef_ve(self,checkpoint_path):
         model = ALBEF_ve(config=self.config, 
                          text_encoder='bert-base-uncased', 
@@ -197,7 +198,7 @@ class RETRIEVAL_MODULE:
                     logits = image_features @ self.embeddings.T
                     logits = np.squeeze(logits.to('cpu').numpy(), axis=0).astype('float64')
                     norm_logits = (logits - logits.mean()) / (logits.std())
-                    probs = _softmax(norm_logits)
+                    probs = softmax(norm_logits)
                     y_pred.append(probs)
             return np.array(y_pred)
 
