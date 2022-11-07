@@ -1,4 +1,4 @@
-# CXR-ReFusE
+# X-REM
 
 ## Preparation
 
@@ -29,16 +29,16 @@ Download the train/test reports and images from [MIMIC-CXR](https://physionet.or
 
 ## Environment
 
-Create a conda environment for CXR-ReFusE:
+Create a conda environment for X-REM:
 
 ```
-conda env create -f environment.yml -n cxr-refuse-env
+conda env create -f environment.yml -n X-REM-env
 ```
 
 Activate the environment:
 
 ```
-conda activate cxr-refuse-env
+conda activate X-REM-env
 ```
 
 ## Preprocessing
@@ -58,11 +58,11 @@ cd ALBEF
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env Pretrain.py --config configs/Pretrain.yaml --output_dir <output path>  --checkpoint <path to pretrained ALBEF checkpoint>  --resume true
 ```
 
-Generate the train file for finetuning ALBEF on visual entailment task:
+Generate the train file for finetuning ALBEF on image-text matching task (visual entailment task with a binary (entailment/non-entailment) classification):
 ```
 python generate_ve_train.py
 ```
-Finetune the ALBEF model on visual entailment task:
+Finetune the ALBEF model on image-text matching task:
 ```
 cd ALBEF 
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env VE.py --config ./configs/VE.yaml --output_dir <output path> --checkpoint <path to checkpoint>
@@ -72,7 +72,7 @@ python3 -m torch.distributed.launch --nproc_per_node=4 --use_env VE.py --config 
 
 ```
 cd ALBEF
-python3 CXR-ReFusE-pipeline.py --save_path before_nli.csv
+python3 XREM-pipeline.py --save_path before_nli.csv
 cd ../ifcc
 conda activate m2trans
 python3 m2trans_nli_filter.py --input_path before_nli.csv --save_path after_nli.csv
@@ -99,18 +99,18 @@ Refer to [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric) 
 Generate reports without using the visual entailment scores: 
 ```
 cd ALBEF
-python3 CXR-ReFusE-pipeline.py --albef_retrieval_delimiter ' ' --save_path no_ve.csv --albef_retrieval_top_k 2 --albef_ve_top_k 0
+python3 XREM-pipeline.py --albef_retrieval_delimiter ' ' --save_path no_ve.csv --albef_retrieval_top_k 2 --albef_ve_top_k 0
 ```
 
 Generate reports without the nli filter:
 ```
 cd ALBEF
-python3 CXR-ReFusE-pipeline.py --albef_ve_delimiter ' ' --save_path no_nli.csv --albef_ve_top_k 1
+python3 XREM-pipeline.py --albef_ve_delimiter ' ' --save_path no_nli.csv --albef_ve_top_k 1
 ```
 
 Replace the nli filter with bertscore as the metric for measuring redundancy:
 ```
 cd ALBEF
-python3 CXR-ReFusE-pipeline.py --save_path before_bertscore.csv
+python3 XREM-pipeline.py --save_path before_bertscore.csv
 python3 bertscore_filter.py --input_path before_bertscore.csv --save_path after_bertscore.csv
 ```
