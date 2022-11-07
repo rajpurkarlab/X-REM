@@ -1,4 +1,4 @@
-# X-REM
+# X-REM  (Contrastive X-Ray REport Match)
 
 ## Preparation
 
