@@ -97,25 +97,35 @@ Refer to [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric) 
 
 ## Supplementary Experiments
 
-Generate reports without using the image-text matching scores: 
+1. Generate reports with varying top-k value for retrieval: 
+```
+cd ALBEF
+python3 XREM_pipeline.py --save_path <preliminary save path> --albef_retrieval_top_k <num reports retrieved with cosine sim> --albef_itm_top_k <num reports retrieved with image-text matching>
+cd ../ifcc
+conda activate m2trans
+python3 m2trans_nli_filter.py --input_path <preliminary save path> --save_path <final save path> --topk <num reports retrieved with nli filter> 
+conda deactivate
+```
+
+2. Generate reports without using the image-text matching scores: 
 ```
 cd ALBEF
 python3 XREM_pipeline.py --albef_retrieval_delimiter ' ' --save_path <final save path> --albef_retrieval_top_k 2 --albef_itm_top_k 0
 ```
 
-Generate reports without the nli filter:
+3. Generate reports without the nli filter:
 ```
 cd ALBEF
 python3 XREM_pipeline.py --albef_ve_delimiter ' ' --save_path <final save path> --albef_itm_top_k 1
 ```
 
-Replace the nli filter with bertscore as the metric for measuring redundancy:
+4. Replace the nli filter with bertscore as the metric for measuring redundancy:
 ```
 cd ALBEF
 python3 XREM_pipeline.py --save_path <preliminary save path>
 python3 bertscore_filter.py --input_path <preliminary save path> --save_path <final save path>
 ```
-Skip the pre-training step and directly fine-tune off-the-shelf ALBEF checkpoint on image-text matching:
+5. Skip the pre-training step and directly fine-tune off-the-shelf ALBEF checkpoint on image-text matching:
 ```
 cd ALBEF
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env VE.py --config ./configs/VE.yaml --output_dir <output path> --checkpoint <path to ALBEF_4M.pth>
