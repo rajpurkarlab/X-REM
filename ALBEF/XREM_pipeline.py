@@ -44,7 +44,7 @@ if __name__ == '__main__':
                         default='example.csv', 
                         help='path to store the output')
     parser.add_argument('--albef_retrieval_config', 
-                        default='configs/Retrieval_flickr.yaml', 
+                        default='configs/Cosine-Retrieval.yaml', 
                         help='config file for the pre-trained albef model used for cosine similarity retrieval')
     parser.add_argument('--albef_retrieval_ckpt', 
                         default='output/sample/pretrain/checkpoint_59.pth', 
@@ -57,10 +57,10 @@ if __name__ == '__main__':
                         default='[SEP]', 
                         help='delimiter used for the cosine similarity retrieval step')
     parser.add_argument('--albef_itm_config', 
-                        default='configs/VE.yaml', 
+                        default='configs/ITM.yaml', 
                         help='config file for the albef model fine-tuned on image-text matching (binary visual-entailment)')
     parser.add_argument('--albef_itm_ckpt', 
-                        default='output/sample/ve/checkpoint_7.pth', 
+                        default='output/sample/itm/checkpoint_7.pth', 
                         help='weights for the fine-tuned albef model')    
     parser.add_argument('--albef_itm_top_k', 
                         default=10, 

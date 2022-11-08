@@ -1,10 +1,9 @@
 import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
-from PIL import Image
 
 from dataset.caption_dataset import re_train_dataset, re_eval_dataset, pretrain_dataset
-from dataset.ve_dataset import ve_dataset
+from dataset.itm_dataset import itm_dataset
 
 from dataset.randaugment import RandomAugment
 
@@ -35,10 +34,10 @@ def create_dataset(dataset, config):
         return train_dataset, val_dataset, test_dataset   
 
                
-    elif dataset=='ve':   
-        train_dataset = ve_dataset(config['train_file'], train_transform)  
-        val_dataset = ve_dataset(config['val_file'], test_transform)  
-        test_dataset = ve_dataset(config['test_file'], test_transform)                
+    elif dataset=='itm':   
+        train_dataset = itm_dataset(config['train_file'], train_transform)  
+        val_dataset = itm_dataset(config['val_file'], test_transform)  
+        test_dataset = itm_dataset(config['test_file'], test_transform)                
         return train_dataset, val_dataset, test_dataset     
     
 

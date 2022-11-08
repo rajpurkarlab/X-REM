@@ -1,8 +1,6 @@
-train_file: 'data/ve_train.json'
-val_file: 'data/ve_dev.json'                
-test_file: 'data/ve_test.json'
-
-image_root: '/export/home/project/SNLI-VE/data/images'
+train_file: '../data/itm_train.json'
+val_file: '../data/itm_dev.json'                
+test_file: '../data/itm_test.json'
 
 image_res: 384
 batch_size_train: 32 

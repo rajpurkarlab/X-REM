@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from torch.utils import data
 from torchvision import transforms
 import models
-from models.model_ve import ALBEF as ALBEF_ve
+from models.model_itm import ALBEF as ALBEF_itm
 from models.model_retrieval import ALBEF as ALBEF_retrieval
 from models.vit import interpolate_pos_embed
 from models.tokenization_bert import BertTokenizer
@@ -37,7 +37,7 @@ class RETRIEVAL_MODULE:
                 max_token_len):
                 
         self.mode = mode
-        assert mode == 'cosine-sim' or mode == 'image-text-matching', 'mode should be cosine-sim or visual-entailment'
+        assert mode == 'cosine-sim' or mode == 'image-text-matching', 'mode should be cosine-sim or image-text-matching'
         self.impressions = impressions
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased') 
@@ -45,24 +45,24 @@ class RETRIEVAL_MODULE:
         self.input_resolution = input_resolution
         self.topk = topk
         self.max_token_len = max_token_len
-        self.transform = transforms.Compose([transforms.Resize((input_resolution,input_resolution),
-                                                               interpolation=Image.BICUBIC),
-                                             Normalize((101.48761, 101.48761, 101.48761), 
-                                                       (83.43944, 83.43944, 83.43944))])
+        self.transform = transforms.Compose([
+                                            transforms.Resize((input_resolution,input_resolution),interpolation=Image.BICUBIC),
+                                            Normalize((101.48761, 101.48761, 101.48761), (83.43944, 83.43944, 83.43944))
+                                        ])
         self.dset = CXRTestDataset_h5(transform=self.transform, img_path=img_path)  
         self.delimiter = delimiter
-        self.ve_labels = {'contradiction':0, 'neutral':1, 'entailment':2}
+        self.itm_labels = {'negative':0,  'positive':2}
 
         if mode == 'cosine-sim':
             self.load_albef_retrieval(checkpoint)
         else:
-            self.load_albef_ve(checkpoint)
+            self.load_albef_itm(checkpoint)
 
 
     #adapted albef codebase
     #For Image-Text Matching, we use ALBEF fine-tuned on visual entailmet to perform binary classification (entail/nonentail) 
-    def load_albef_ve(self,checkpoint_path):
-        model = ALBEF_ve(config=self.config, 
+    def load_albef_itm(self,checkpoint_path):
+        model = ALBEF_itm(config=self.config, 
                          text_encoder='bert-base-uncased', 
                          tokenizer=self.tokenizer
                          ).to(self.device)  
@@ -100,7 +100,7 @@ class RETRIEVAL_MODULE:
             self.generate_embeddings()
             return self.cosine_sim_predict()
         else: 
-            return self.ve_predict() 
+            return self.itm_predict() 
 
     #adapted cxr-repair codebase
     def generate_embeddings(self, batch_size=2000):
@@ -144,7 +144,7 @@ class RETRIEVAL_MODULE:
         return reports_list
 
     #adapted albef codebase
-    def ve_predict(self):
+    def itm_predict(self):
         y_preds = []
         bs = 100
         for i in tqdm(range(len(self.dset))):
@@ -166,11 +166,11 @@ class RETRIEVAL_MODULE:
                                 return_dict = True
                                 )    
                     prediction = self.model.cls_head(output.last_hidden_state[:,0,:])
-                    entailment_score = prediction[:, self.ve_labels['entailment']]
+                    positive_score = prediction[:, self.itm_labels['positive']]
                 except:
-                    entailment_score = torch.Tensor([0]).cuda()
+                    positive_score = torch.Tensor([0]).cuda()
 
-                preds = torch.cat([preds, entailment_score])
+                preds = torch.cat([preds, positive_score])
             idxes = torch.squeeze(preds).detach().cpu().numpy()
             y_preds.append(idxes)
             
