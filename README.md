@@ -32,7 +32,7 @@ Download our [pretrained checkpoints](https://drive.google.com/file/d/11UorBbh5c
 
 ## Data
 
-Download the train/test reports and images from [MIMIC-CXR](https://physionet.org/content/mimic-cxr/2.0.0/). You may have to request for an approval to access the files. We also provide the ids used in our study in `mimic_pretrain_study_id.csv`, `mimic_itm_study_id.csv`, and `mimic_challenge_dicom_id.csv`. 
+Download the train/test reports and images from [MIMIC-CXR](https://physionet.org/content/mimic-cxr/2.0.0/). You may have to request for an approval to access the files.  `mimic_pretrain_study_id.csv` and `mimic_itm_study_id.csv` hold the MIMIC-CXR study ids we used to train our model, and `mimic_challenge_dicom_id.csv` holds the study id we set aside to use for radiologist evaluation. 
 
 ## Environment
 
@@ -62,7 +62,7 @@ python3 -m preprocess_mimic.py --data_dir <path to MIMIC>  --impressions_train_p
 Pretrain ALBEF:
 ```
 cd ALBEF 
-python3 -m torch.distributed.launch --nproc_per_node=4 --use_env Pretrain.py --config configs/Pretrain.yaml --output_dir <output path>  --checkpoint <path to pretrained ALBEF checkpoint>  --resume true
+python3 -m torch.distributed.launch --nproc_per_node=4 --use_env Pretrain.py --config configs/Pretrain.yaml --output_dir <output path>  --checkpoint <path to ALBEF_4M.pth>  --resume true
 ```
 Generating train files for image-text matching task:
 
@@ -72,7 +72,7 @@ python generate_itm_train.py
 Finetune the ALBEF model on image-text matching task:
 ```
 cd ALBEF 
-python3 -m torch.distributed.launch --nproc_per_node=4 --use_env ITM.py --config ./configs/ITM.yaml --output_dir <output path> --checkpoint <path to checkpoint>
+python3 -m torch.distributed.launch --nproc_per_node=4 --use_env ITM.py --config ./configs/ITM.yaml --output_dir <output path> --checkpoint <path to pre-trained checkpoint>
 ```
 
 ## Inference
