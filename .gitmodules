@@ -1,0 +1,3 @@
+[submodule "ifcc"]
+	path = ifcc
+	url = https://github.com/ysmiura/ifcc
