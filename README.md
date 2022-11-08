@@ -9,23 +9,12 @@ This is the offical repository for X-REM (Contrastive X-Ray REport Match), a ret
 
 ## Preparation
 
-Make sure to download the github repositories below: 
-
-* [ifcc](https://github.com/ysmiura/ifcc)
-    * download model_medrad_19k.tar.gz by running `resources/download.sh`
-* [CheXbert](https://github.com/stanfordmlgroup/CheXbert)
-    * download the [pretrained weights](https://stanfordmedicine.box.com/s/c3stck6w6dol3h36grdc97xoydzxd7w9) 
-* [CXR-RePaiR](https://github.com/rajpurkarlab/CXR-RePaiR)
-* [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric)
-
-Once you clone the repositories, add the following files to the respective folders:
 
 ```
-mv M2TransNLI.py example_m2trans_nli.csv m2trans_nli_filter.py <path to ifcc folder>
-mv compute_avg_score.py prepare_df.py <path to CXR-Report-Metric folder>
+mv M2TransNLI.py example_m2trans_nli.csv m2trans_nli_filter.py ifcc
+mv compute_avg_score.py prepare_df.py CXR-Report-Metric
 ```
 
-As we made multiple edits to the ALBEF directory, please refer to the ALBEF directory uploaded here instead of cloning a new one. 
 
 Download our [pretrained checkpoints](https://drive.google.com/file/d/11UorBbh5cOcDfIzy_lCgMdn0zThvpDbp/view?usp=sharing) here!
    
