@@ -66,14 +66,13 @@ python3 -m torch.distributed.launch --nproc_per_node=4 --use_env Pretrain.py --c
 ```
 Generating train files for image-text matching task:
 
-(Note that we approached image-text matching as a visual entailment task with a binary classification of entailment/non-entailment)
 ```
-python generate_ve_train.py
+python generate_itm_train.py
 ```
 Finetune the ALBEF model on image-text matching task:
 ```
 cd ALBEF 
-python3 -m torch.distributed.launch --nproc_per_node=4 --use_env VE.py --config ./configs/VE.yaml --output_dir <output path> --checkpoint <path to checkpoint>
+python3 -m torch.distributed.launch --nproc_per_node=4 --use_env ITM.py --config ./configs/ITM.yaml --output_dir <output path> --checkpoint <path to checkpoint>
 ```
 
 ## Inference
@@ -100,7 +99,7 @@ python3 compute_avg_score.py --fpath <input path>
 ```
 Refer to [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric) for a detailed explanation on the metric.
 
-## Supplementary Experiments
+## Ablation Experiments
 
 * Generate reports with varying top-k values for retrieval: 
 ```
