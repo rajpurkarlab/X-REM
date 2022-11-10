@@ -3,14 +3,19 @@ import torch
 from PIL import Image
 import h5py
 from torch.utils import data
+from torchvision import transforms
 
 #Adapted cxr-repair
 #input: .h5 file containing the images
 class CXRTestDataset_h5(data.Dataset):
-    def __init__(self, img_path, transform=None):
+    def __init__(self, img_path, input_resolution):
         super().__init__()
         self.img_dset = h5py.File(img_path, 'r')['cxr']
-        self.transform = transform
+        self.transform = transforms.Compose([
+                                            transforms.Resize((input_resolution,input_resolution),interpolation=Image.BICUBIC),
+                                            transforms.Normalize((101.48761, 101.48761, 101.48761), (83.43944, 83.43944, 83.43944))
+                                        ])
+
         
     def __len__(self):
         return len(self.img_dset)
@@ -30,10 +35,13 @@ class CXRTestDataset_h5(data.Dataset):
 #Adapted cxr-repair
 #input: files containing paths to the image files
 class CXRTestDataset(data.Dataset):
-    def __init__(self, target_files, transform=None):
+    def __init__(self, target_files, input_resolution):
         super().__init__()
         self.files = target_files
-        self.transform = transform
+        self.transform = transforms.Compose([
+                                            transforms.Resize((input_resolution,input_resolution),interpolation=Image.BICUBIC),
+                                            transforms.Normalize((101.48761, 101.48761, 101.48761), (83.43944, 83.43944, 83.43944))
+                                        ])
 
     def __len__(self):
         return len(self.files)

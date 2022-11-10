@@ -10,7 +10,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from torch.utils import data
-from torchvision import transforms
+
 import models
 from models.model_itm import ALBEF as ALBEF_itm
 from models.model_retrieval import ALBEF as ALBEF_retrieval
@@ -19,37 +19,28 @@ from models.tokenization_bert import BertTokenizer
 from torchvision.transforms import Compose, Normalize, Resize, InterpolationMode
 import utils
 from PIL import Image
-from XREM_dataset import CXRTestDataset, CXRTestDataset_h5
 
 
 
 class RETRIEVAL_MODULE:
 
     def __init__(self, 
-                impressions, 
                 mode, 
                 config, 
                 checkpoint, 
                 topk, 
                 input_resolution, 
-                img_path, 
                 delimiter, 
                 max_token_len):
                 
         self.mode = mode
         assert mode == 'cosine-sim' or mode == 'image-text-matching', 'mode should be cosine-sim or image-text-matching'
-        self.impressions = impressions
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased') 
         self.config = yaml.load(open(config, 'r'), Loader=yaml.Loader)
         self.input_resolution = input_resolution
         self.topk = topk
         self.max_token_len = max_token_len
-        self.transform = transforms.Compose([
-                                            transforms.Resize((input_resolution,input_resolution),interpolation=Image.BICUBIC),
-                                            Normalize((101.48761, 101.48761, 101.48761), (83.43944, 83.43944, 83.43944))
-                                        ])
-        self.dset = CXRTestDataset_h5(transform=self.transform, img_path=img_path)  
         self.delimiter = delimiter
         self.itm_labels = {'negative':0,  'positive':2}
 
@@ -95,19 +86,19 @@ class RETRIEVAL_MODULE:
         model = model.eval()
         self.model = model
 
-    def predict(self):
+    def predict(self, images_dataset, reports):
         if self.mode == 'cosine-sim':
-            self.generate_embeddings()
-            return self.cosine_sim_predict()
+            embeddings = self.generate_embeddings(reports)
+            return self.cosine_sim_predict(images_dataset, reports, embeddings)
         else: 
-            return self.itm_predict() 
+            return self.itm_predict(images_dataset, reports) 
 
     #adapted cxr-repair codebase
-    def generate_embeddings(self, batch_size=2000):
+    def generate_embeddings(self, reports, batch_size=2000):
         #adapted albef codebase
-        def _embed_text(impression):
+        def _embed_text(report):
             with torch.no_grad():
-                text_input = self.tokenizer(impression, 
+                text_input = self.tokenizer(report, 
                                             padding='max_length', 
                                             truncation=True, 
                                             max_length=self.max_token_len, 
@@ -119,44 +110,45 @@ class RETRIEVAL_MODULE:
                 text_embed = F.normalize(self.model.text_proj(text_feat[:,0,:]))
                 text_embed /= text_embed.norm(dim=-1, keepdim=True)
             return text_embed
-        num_batches = self.impressions.shape[0] // batch_size
+        num_batches = reports.shape[0] // batch_size
         tensors = []
         for i in tqdm(range(num_batches + 1)):
-            batch = list(self.impressions[batch_size*i:min(batch_size*(i+1), len(self.impressions))])
+            batch = list(reports[batch_size*i:min(batch_size*(i+1), len(reports))])
             weights = _embed_text(batch)
             tensors.append(weights)
-        self.embeddings = torch.cat(tensors)
+        embeddings = torch.cat(tensors)
+        return embeddings
 
     #adapted cxr-repair codebase
-    def select_reports(self, y_pred):      
+    def select_reports(self, reports, y_pred):      
         reports_list = []
         for i, simscores in tqdm(enumerate(y_pred)):
             idxes = np.argsort(np.array(simscores))[-1 * self.topk:]
             idxes = np.flip(idxes)
             report = ""
-            for idx in idxes: 
+            for j in idxes: 
                 if self.mode == 'cosine-sim':
-                    cand = self.impressions[idx]
+                    cand = reports[j]
                 else:
-                    cand = self.impressions[i][idx]
+                    cand = reports[i][j]
                 report += cand + self.delimiter
             reports_list.append(report)
         return reports_list
 
     #adapted albef codebase
-    def itm_predict(self):
+    def itm_predict(self, images_dataset, reports):
         y_preds = []
         bs = 100
-        for i in tqdm(range(len(self.dset))):
-            image = self.dset[i].to(self.device, dtype = torch.float)
+        for i in tqdm(range(len(images_dataset))):
+            image = images_dataset[i].to(self.device, dtype = torch.float)
             image = torch.unsqueeze(image, axis = 0)
             image_embeds = self.model.visual_encoder(image)
             image_atts = torch.ones(image_embeds.size()[:-1],dtype=torch.long).to(image.device)
             preds = torch.Tensor([]).to(self.device)
-            local_impressions = self.impressions[i]
-            for idx in range(0, len(local_impressions), bs):
+            local_reports = reports[i]
+            for idx in range(0, len(local_reports), bs):
                 try:
-                    text = self.tokenizer(local_impressions[idx:idx + bs], 
+                    text = self.tokenizer(local_reports[idx:idx + bs], 
                                           padding='longest', 
                                           return_tensors="pt").to(self.device) 
                     output = self.model.text_encoder(text.input_ids, 
@@ -174,38 +166,31 @@ class RETRIEVAL_MODULE:
             idxes = torch.squeeze(preds).detach().cpu().numpy()
             y_preds.append(idxes)
             
-        reports_list = self.select_reports(y_preds)
-        df = pd.DataFrame(reports_list)
-        df.columns = [ "Report Impression"]
-        return df
+        return self.select_reports(reports, y_preds)
 
     #adapted cxr-repair codebase
-    def cosine_sim_predict(self): 
+    def cosine_sim_predict(self, images_dataset, reports, embeddings): 
         def softmax(x):
             return np.exp(x)/sum(np.exp(x))
-        def embed_img(data):
-            images = data.to(self.device, dtype = torch.float)
+        def embed_img(images):
+            images = images.to(self.device, dtype = torch.float)
             image_features = self.model.visual_encoder(images)        
             image_features = self.model.vision_proj(image_features[:,0,:])            
             image_features = F.normalize(image_features,dim=-1) 
             return image_features
-        def compute_cosine_sim():
-            y_pred = []
-            loader = torch.utils.data.DataLoader(self.dset, shuffle=False)
-            with torch.no_grad():
-                for  data in tqdm(loader):
-                    image_features = embed_img(data)
-                    logits = image_features @ self.embeddings.T
-                    logits = np.squeeze(logits.to('cpu').numpy(), axis=0).astype('float64')
-                    norm_logits = (logits - logits.mean()) / (logits.std())
-                    probs = softmax(norm_logits)
-                    y_pred.append(probs)
-            return np.array(y_pred)
 
-        y_pred = compute_cosine_sim()
-        reports_list = self.select_reports(y_pred)
-        df = pd.DataFrame(reports_list)
-        df.columns = [ "Report Impression"]
-        return df
+        y_pred = []
+        image_loader = torch.utils.data.DataLoader(images_dataset, shuffle=False)
+        with torch.no_grad():
+            for image in tqdm(image_loader):
+                image_features = embed_img(image)
+                logits = image_features @ embeddings.T
+                logits = np.squeeze(logits.to('cpu').numpy(), axis=0).astype('float64')
+                norm_logits = (logits - logits.mean()) / (logits.std())
+                probs = softmax(norm_logits)
+                y_pred.append(probs)
+                
+        y_pred = np.array(np.array(y_pred))
+        return self.select_reports(reports, y_pred)
 
         
