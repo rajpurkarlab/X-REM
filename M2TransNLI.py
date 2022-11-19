@@ -42,7 +42,7 @@ class M2TransNLI:
 
     @classmethod
     def load_model(cls, states=None):
-        resource_dir = '/home/ec2-user/dataset/ifcc-code/resources/'#os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'resources')
+        resource_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'resources')
         if states is None:
             name = cls.DEFAULT_NAME
             states = os.path.join(resource_dir, cls.DEFAULT_STATES, cls.STATES_FILENAME)

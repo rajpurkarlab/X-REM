@@ -12,7 +12,7 @@ dependencies:
   - navigator-updater
   - libgcc
   - torchinfo
-  - pytorch
-  - torchvision
+  - pytorch=1.12.1
+  - torchvision=0.12.0
   - cudatoolkit=11.6
-  - torchaudio
+  - torchaudio=0.12.1
