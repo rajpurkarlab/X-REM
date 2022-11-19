@@ -130,41 +130,33 @@ Refer to [CXR-Report-Metric](https://github.com/rajpurkarlab/CXR-Report-Metric) 
 
 ## Ablation Experiments
 
-* Generate reports with varying top-k values for retrieval: 
+* To generate reports with varying top-k values, repeat the previous step with the following config file: 
 ```
-cd ALBEF
-python3 XREM_pipeline.py --save_path <preliminary save path> --albef_retrieval_top_k <num reports retrieved with cosine sim> --albef_itm_top_k <num reports retrieved with image-text matching>
-cd ../ifcc
-conda activate m2trans
-python3 m2trans_nli_filter.py --input_path <preliminary save path> --save_path <final save path> --topk <num reports retrieved with nli filter> 
-conda deactivate
+config.albef_retrieval_top_k = <num reports retrieved with cosine sim>
+config.albef_itm_top_k = <num reports retrieved with image-text matching scores>
 ```
 
-* Generate reports without using the image-text matching scores: 
+* To generate reports without using the image-text matching scores, initialize the model with the following config file: 
 ```
-cd ALBEF
-python3 XREM_pipeline.py --albef_retrieval_delimiter ' ' --save_path <final save path> --albef_retrieval_top_k 2 --albef_itm_top_k 0
-```
-
-* Generate reports without the nli filter:
-```
-cd ALBEF
-python3 XREM_pipeline.py --albef_ve_delimiter ' ' --save_path <final save path> --albef_itm_top_k 1
+config.albef_retrieval_top_k = 2
+config.albef_retrieval_delimiter = ' '
+config.albef_itm_top_k = 0
 ```
 
-* Replace the nli filter with bertscore as the metric for measuring redundancy:
+* To generate reports without the nli filter, initialize the model with the following config file:
 ```
-cd ALBEF
-python3 XREM_pipeline.py --save_path <preliminary save path>
+config.albef_itm_delimiter = ' '
+config.albef_itm_top_k = 1
+```
+
+* To replace the nli filter with bertscore as the metric for measuring redundancy, run the following command instead of `m2trans_nli_filter.py`:
+```
+cd X-REM
 python3 bertscore_filter.py --input_path <preliminary save path> --save_path <final save path>
 ```
-* Skip the pre-training step and directly fine-tune the off-the-shelf ALBEF checkpoint on image-text matching:
+* To skip the pre-training step and directly fine-tune the off-the-shelf ALBEF checkpoint on image-text matching, re-train the model:
 ```
-cd ALBEF
-python3 -m torch.distributed.launch --nproc_per_node=4 --use_env VE.py --config ./configs/VE.yaml --output_dir <output path> --checkpoint <path to ALBEF_4M.pth>
-python3 XREM_pipeline.py --albef_retrieval_ckpt <path to ALBEF_4M.pth> --albef_itm_ckpt <path to the fine-tuned checkpoint> --save_path <preliminary save path>
-cd ../ifcc
-conda activate m2trans
-python3 m2trans_nli_filter.py --input_path <preliminary save path> --save_path <final save path>
-conda deactivate
+cd X-REM
+python3 -m torch.distributed.launch --nproc_per_node=4 --use_env ITM.py --config ./configs/ITM.yaml --output_dir <output path> --checkpoint <path to ALBEF_4M.pth>
 ```
+Then, initialize the config file with `albef_retrieval_ckpt`=<path to ALBEF_4M.pth> and `albef_itm_ckpt`=<output path> . 
