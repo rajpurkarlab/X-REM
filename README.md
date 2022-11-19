@@ -159,4 +159,4 @@ python3 bertscore_filter.py --input_path <preliminary save path> --save_path <fi
 cd X-REM
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env ITM.py --config ./configs/ITM.yaml --output_dir <output path> --checkpoint <path to ALBEF_4M.pth>
 ```
-Then, initialize the config file with `albef_retrieval_ckpt`=<path to ALBEF_4M.pth> and `albef_itm_ckpt`=<output path> . 
+Then, initialize the config file with `albef_retrieval_ckpt = <path to ALBEF_4M.pth> ` and `albef_itm_ckpt = <output path>` . 
