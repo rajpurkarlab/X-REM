@@ -50,7 +50,7 @@ python3 -m preprocess_mimic.py --data_dir <path to MIMIC>  --impressions_train_p
 
 Pretrain ALBEF:
 ```
-cd ALBEF 
+cd X-REM
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env Pretrain.py --config configs/Pretrain.yaml --output_dir <output path>  --checkpoint <path to ALBEF_4M.pth>  --resume true
 ```
 Generating train files for image-text matching task:
@@ -60,7 +60,7 @@ python generate_itm_train.py
 ```
 Finetune the ALBEF model on image-text matching task:
 ```
-cd ALBEF 
+cd X-REM
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env ITM.py --config ./configs/ITM.yaml --output_dir <output path> --checkpoint <path to pre-trained checkpoint>
 ```
 
