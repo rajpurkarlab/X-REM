@@ -48,7 +48,7 @@ python3 -m preprocess_mimic.py --data_dir <path to MIMIC>  --impressions_train_p
 
 ## Training
 
-Pretrain ALBEF:
+To pretrain ALBEF, first edit `configs/Pretrain.yaml` to hold the path to your training dataset and run:
 ```
 cd X-REM
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env Pretrain.py --config configs/Pretrain.yaml --output_dir <output path>  --checkpoint <path to ALBEF_4M.pth>  --resume true
