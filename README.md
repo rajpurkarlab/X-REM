@@ -9,9 +9,15 @@ This is the offical repository for X-REM (Contrastive X-Ray REport Match), a ret
 
 ## Preparation
 
+Clone X-REM github repo and its submodules:
 
 ```
-mv M2TransNLI.py example_m2trans_nli.csv m2trans_nli_filter.py ifcc
+git clone --recursive https://github.com/rajpurkarlab/X-REM.git
+```
+
+Move the X-REM python scripts to the appropriate folders:  
+```
+mv M2TransNLI.py m2trans_nli_filter.py ifcc
 mv compute_avg_score.py prepare_df.py CXR-Report-Metric
 ```
 
@@ -48,7 +54,7 @@ python3 -m preprocess_mimic.py --data_dir <path to MIMIC>  --impressions_train_p
 
 ## Training
 
-Pretrain ALBEF:
+To pretrain ALBEF, first edit `configs/Pretrain.yaml` to hold the path to your training dataset and run:
 ```
 cd X-REM
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env Pretrain.py --config configs/Pretrain.yaml --output_dir <output path>  --checkpoint <path to ALBEF_4M.pth>  --resume true
