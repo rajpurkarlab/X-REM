@@ -1,5 +1,5 @@
 
-train_file: ['../data/mimic_train.json']
+train_file: ['../../jaehwan_CXR_ReFusE/data/mimic_train.json']
 bert_config: 'configs/config_bert.json'
 
 image_res: 256
