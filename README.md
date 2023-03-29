@@ -4,7 +4,15 @@ This is the offical repository for X-REM (Contrastive X-Ray REport Match), a ret
 
 
 <p align="center">
-  <img src="image.png" width="800">
+  <img src="inference.png" width="800">
+</p>
+
+<p align="center">
+  <img src="dataset.png" width="800">
+</p>
+
+<p align="center">
+  <img src="training.png" width="800">
 </p>
 
 ## Preparation
