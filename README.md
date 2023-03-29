@@ -2,17 +2,19 @@
 
 This is the offical repository for X-REM (Contrastive X-Ray REport Match), a retrieval-based radiology report generation module that uses learned image-text matching scores as the similarity metric for retrieval. We provide the implementation of X-REM as well as the source code for both training and inference for impression generation. 
 
-
-<p align="center">
-  <img src="inference.png" width="800">
-</p>
-
+Dataset generation for Image-Text Matching:
 <p align="center">
   <img src="dataset.png" width="800">
 </p>
 
+X-REM Training:
 <p align="center">
   <img src="training.png" width="800">
+</p>
+
+X-REM Inference:
+<p align="center">
+  <img src="inference.png" width="800">
 </p>
 
 ## Preparation
@@ -174,3 +176,13 @@ cd X-REM
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env ITM.py --config ./configs/ITM.yaml --output_dir <output path> --checkpoint <path to ALBEF_4M.pth>
 ```
 Then, initialize the config file with `albef_retrieval_ckpt = <path to ALBEF_4M.pth> ` and `albef_itm_ckpt = <output path>` . 
+
+## Issues
+Feel free to contact Jaehwan Jeong (adriel@nyu.edu) or Katherine Tian (ktian@college.harvard.edu) regarding any questions regarding the code or our paper.
+
+## Citation
+```
+Jeong, J., Tian, K. et al. Multimodal Image-Text Matching Improves Retrieval-based Chest X-Ray Report Generation. Medical Imaging with Deep Learning (2023)
+```
+
+
