@@ -1,6 +1,6 @@
 # X-REM
 
-This is the offical repository for X-REM (Contrastive X-Ray REport Match), a retrieval-based radiology report generation module that uses learned image-text matching scores as the similarity metric for retrieval. We provide the implementation of X-REM as well as the source code for both training and generating inference. 
+This is the offical repository for X-REM (Contrastive X-Ray REport Match), a retrieval-based radiology report generation module that uses learned image-text matching scores as the similarity metric for retrieval. We provide the implementation of X-REM as well as the source code for both training and inference for impression generation. 
 
 
 <p align="center">
@@ -54,12 +54,12 @@ python3 -m preprocess_mimic.py --data_dir <path to MIMIC>  --impressions_train_p
 
 ## Training
 
-To pretrain ALBEF, first edit `configs/Pretrain.yaml` to hold the path to your training dataset and run:
+To pretrain ALBEF, first specify the path to your training dataset in `configs/Pretrain.yaml` and run:
 ```
 cd X-REM
 python3 -m torch.distributed.launch --nproc_per_node=4 --use_env Pretrain.py --config configs/Pretrain.yaml --output_dir <output path>  --checkpoint <path to ALBEF_4M.pth>  --resume true
 ```
-Generating train files for image-text matching task:
+Generate train files for image-text matching task:
 
 ```
 python generate_itm_train.py
@@ -110,7 +110,7 @@ itm_output = xrem(reports, dset_cosine, dset_itm)
 Save the output as a pandas datframe: 
 
 ```
-itm_df = pd.DataFrame(output, columns = ['Report Impression'])
+itm_df = pd.DataFrame(itm_output, columns = ['Report Impression'])
 itm_df.to_csv(<preliminary save path>, index = False)
 ```
 
