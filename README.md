@@ -178,7 +178,7 @@ python3 -m torch.distributed.launch --nproc_per_node=4 --use_env ITM.py --config
 Then, initialize the config file with `albef_retrieval_ckpt = <path to ALBEF_4M.pth> ` and `albef_itm_ckpt = <output path>` . 
 
 ## Issues
-Feel free to contact Jaehwan Jeong (adriel@nyu.edu) or Katherine Tian (ktian@college.harvard.edu) regarding any questions regarding the code or our paper.
+Feel free to contact Jaehwan Jeong (jaehwanj@stanford.edu) regarding any questions regarding the code or our paper.
 
 ## Citation
 ```
