@@ -110,7 +110,7 @@ itm_output = xrem(reports, dset_cosine, dset_itm)
 Save the output as a pandas datframe: 
 
 ```
-itm_df = pd.DataFrame(output, columns = ['Report Impression'])
+itm_df = pd.DataFrame(itm_output, columns = ['Report Impression'])
 itm_df.to_csv(<preliminary save path>, index = False)
 ```
 
