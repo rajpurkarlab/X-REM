@@ -1,6 +1,6 @@
 # X-REM
 
-This is the offical repository for X-REM (Contrastive X-Ray REport Match), a retrieval-based radiology report generation module that uses learned image-text matching scores as the similarity metric for retrieval. We provide the implementation of X-REM as well as the source code for both training and inference for impression generation. 
+This is the offical repository for [X-REM (Contrastive X-Ray REport Match)](https://arxiv.org/abs/2303.17579), a retrieval-based radiology report generation module that uses learned image-text matching scores as the similarity metric for retrieval. We provide the implementation of X-REM as well as the source code for both training and inference for impression generation. 
 
 Dataset generation for Image-Text Matching:
 <p align="center">
