@@ -124,7 +124,7 @@ itm_df = pd.DataFrame(itm_output, columns = ['Report Impression'])
 itm_df.to_csv(<preliminary save path>, index = False)
 ```
 
-Post-process the result using an NLI filter: 
+Post-process the result using a NLI filter: 
 ```
 cd ../ifcc
 conda activate m2trans
