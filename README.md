@@ -132,7 +132,6 @@ python3 m2trans_nli_filter.py --input_path <preliminary save path> --save_path <
 conda deactivate
 ```
 
-    
 ## Evaluation
 
 ```
